@@ -37,6 +37,7 @@ use OC\Security\CSP\ContentSecurityPolicyManager;
 use OC\Security\CSP\ContentSecurityPolicyNonceManager;
 use OC\Security\CSRF\CsrfToken;
 use OC\Security\CSRF\CsrfTokenManager;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\EmptyContentSecurityPolicy;
 use OCP\AppFramework\Http\RedirectResponse;
@@ -79,6 +80,8 @@ class SecurityMiddlewareTest extends \Test\TestCase {
 	private $csrfTokenManager;
 	/** @var ContentSecurityPolicyNonceManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $cspNonceManager;
+	/** @var IAppManager|\PHPUnit_Framework_MockObject_MockObject */
+	private $appManager;
 
 	protected function setUp() {
 		parent::setUp();
@@ -96,6 +99,7 @@ class SecurityMiddlewareTest extends \Test\TestCase {
 		$this->middleware = $this->getMiddleware(true, true);
 		$this->secException = new SecurityException('hey', false);
 		$this->secAjaxException = new SecurityException('hey', true);
+		$this->appManager = $this->createMock(IAppManager::class);
 	}
 
 	/**
@@ -116,7 +120,8 @@ class SecurityMiddlewareTest extends \Test\TestCase {
 			$isAdminUser,
 			$this->contentSecurityPolicyManager,
 			$this->csrfTokenManager,
-			$this->cspNonceManager
+			$this->cspNonceManager,
+			$this->appManager
 		);
 	}
 
